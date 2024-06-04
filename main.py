@@ -4,6 +4,7 @@ from time import sleep
 import validations as valid
 import authentications as auth
 import menus as menu
+import movies as mov
 
 users = [{
     'user' : 'emmanuel',
@@ -17,55 +18,84 @@ users = [{
 
 movies = [{
     'title' : 'abc',
-    'genre' : 'ação',
+    'genre' : 'Ação',
     'sinopse' :'Filme massa',
     'ageRating' : '14',
+    'duration' : '150',
     'hours' : '2',
     'minutes' : '30',
     'price'  : '24.99',
-    'rating' : '99%',
+    'rating' : '99',
     'comments' : list()
 }]
 
-
-
 while True:
     menu.title('MENU PRINCIPAL')
-    action = menu.menu(['Login','Cadastro','Sair'])
+    action = menu.menu(['LogIn','Cadastro','Sair'])
 
     if action == 1:
-        for user in users:
-            auth.logIn(user['recognized'],users)
+        loggedIn = False
+        user = auth.logIn(users)
+        if user != None:
+            loggedIn = True
+        sleep(1.5)
+        
+        while loggedIn:
+            if (user['recognized'] == True) and (user['id'] == False):
             
-        while True:
-            if user['recognized'] == True and user['id'] == False:
-                menu.title('MENU - CLIENTES')
-                print(f'Cash: {round(user['bank'],2)}\n')
-                action = menu.menu(['Depositar Dinheiro', 'Catálogo', 'Comprar Ingresso', 'Avaliar Filmes'])
-                
-                if action == 1:
-                    deposit = valid.valInt('Quanto deseja depositar? \nR$')
-                    print('Gerando o QR Code para depósito...')
-                    sleep(1)                
-                    pix = Image.open("./pix.jpg")
-                    pix.show()
-                    user['bank'] += deposit
-                    sleep(3)
-                
-                elif action == 2:
-                    pass
-                
-                elif action == 3:
-                    pass
-                
-                elif action == 4:
-                    auth.logOut(user['recognized'], users)
+                    system('cls')
+                    menu.title('MENU - CLIENTES')
+                    print(f'\033[36mCash: {round(user['bank'],2)}\033[m\n')
+                    action = menu.menu(['Depositar Dinheiro', 'Catálogo', 'Comprar Ingresso', 'Avaliar Filmes', 'LogOut'])
+                    
+                    if action == 1:
+                        deposit = valid.valInt('Quanto deseja depositar? \nR$')
+                        print('Gerando o QR Code para depósito...')
+                        sleep(1)                
+                        pix = Image.open("./pix.png")
+                        pix.show()
+                        user['bank'] += deposit
+                        sleep(3)
+                    
+                    elif action == 2:
+                        mov.catalogue()
+                        
+                    elif action == 3:
+                        pass
+                    
+                    elif action == 4:
+                        pass
+                    
+                    elif action == 5:
+                        auth.logOut(users)
+                        break
+                    
             else:
-                break
+                
+                    system('cls')
+                    menu.title('MENU - ADMIN')
+                    action = menu.menu(['Criar Filme', 'Buscar Filme', 'Atualizar Filme', 'Apagar Filme', 'LogOut'])
+                
+                    if action == 1:
+                        movies.append(mov.createMovie())
+                        
+                    elif action == 2:
+                        mov.readMovie(movies)
+                    
+                    elif action == 3:
+                        mov.updateMovie(movies)
+                    
+                    elif action == 4:
+                        mov.deleteMovie(movies)
+                        
+                    elif action == 5:
+                        auth.logOut(users)
+                        break
                 
             
     elif action == 2:
-        users.append(auth.register())
+        users.append(auth.register(users))
+        print(users)
         
     elif action == 3:
         print('\033[31mFinalizando o programa...\033[m')

@@ -21,3 +21,4 @@ def show(opitons):
     for i in opitons:
         print(f'\033[33m{c}\033[m - \033[34m{i}\033[')
         c += 1
+        

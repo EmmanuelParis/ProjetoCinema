@@ -1,1 +1,108 @@
 import validations as valid
+import menus as menu
+import random
+
+genres = ('Ação', 'Aventura', 'Drama', 'Comédia', 'Ficção Científica', 'Terror')
+
+def createMovie():
+    global genres
+    title = valid.valStr('Digite o título do filme: ')
+    print('\033[33mEscolha o gênero do filme:')
+    genre = menu.menu(genres)
+    sinopse = valid.valStr('Digite a sinopse do filme: ')
+    ageRating = valid.valInt('Digite a faixa etária do filme: ')
+    duration = valid.valInt('Digite a duração do filme (em minutos): ')
+    hours = int(duration) // 60
+    minutes = int(duration) % 60
+    price = valid.valInt('Digite o valor do Ingresso: ')
+    
+    movie = dict()
+    movie['title'] = title
+    movie['genre'] = genres[genre-1]
+    movie['sinopse'] = sinopse
+    movie['ageRating'] = ageRating
+    movie['duration'] = duration
+    movie['hours'] = hours
+    movie['minutes'] = minutes
+    movie['price'] = price
+    movie['rating'] = random.randint(1,100)
+    movie['comments'] = list()
+    return movie
+
+def readMovie(movies=list):
+    searchMovie = valid.valStr('Qual filme deseja buscar? \nFilme: ')
+    for movie in movies:
+        if movie['title'] == searchMovie:
+            menu.line()
+            print(f'\033[36mTítulo do filme: \033[33m{movie['title']}\n\033[36mGênero do filme: \033[33m{movie['genre']}\n\033[36mSinopse do Filme: \033[33m{movie['sinopse']}\n\033[36mFaixa etária permitida: \033[33m{movie['ageRating']}\n\033[36mDuração: \033[33m{movie['hours']} Hora(s) e {movie['minutes']} Minuto(s)\n\033[36mPreço do ingresso: \033[33mR${movie['price']}\n\033[36mAprovação: \033[33m{movie['rating']}%\33[m')
+            menu.line()
+            input('Pressione qualquer tecla para continuar!')
+            
+def updateMovie(movies=list):
+    global genres
+    updateOptions = ('Título', 'Gênero', 'Sinopse', 'Faixa Etária', 'Duração', 'Preço do Ingresso', 'Sair')
+    searchMovie = valid.valStr('Qual filme deseja atualizar? \nFilme: ')
+    for movie in movies:
+        if movie['title'] == searchMovie:
+            print('\033[33mQual informação deseja atualizar?')
+            update = menu.menu(updateOptions)
+            if update == 1:
+                print(f'\33[33mTítulo Atual: {movie['title']}\33[m')
+                newTitle = valid.valStr('\33[34mDigite o novo título: \33[m')
+                movie['title'] = newTitle
+                print('\033[32mAlteração feita com sucesso!\033[m')
+            elif update == 2:
+                print(f'\33[33mGênero Atual: {movie['genre']}\33[m')
+                print('\033[33mEscolha o gênero do filme:')
+                newGenre = menu.menu(genres)
+                movie['genre'] = genres[newGenre-1]
+                print('\033[32mAlteração feita com sucesso!\033[m')
+            elif update == 3:
+                print(f'\33[33mSinopse Atual: {movie['sinopse']}\33[m')
+                newSinopse = valid.valStr('\33[34mDigite a nova sinopse: \33[m')
+                movie['sinopse'] = newSinopse
+                print('\033[32mAlteração feita com sucesso!\033[m')
+            elif update == 4:
+                print(f'\33[33mFaixa Etária Atual: {movie['ageRating']}\33[m')
+                newAgeRating = input('\33[34mDigite a nova faixa etária: \33[m')
+                movie['ageRating'] = newAgeRating
+                print('\033[32mAlteração feita com sucesso!\033[m')
+            elif update == 5:
+                print(f'\33[33mDuração Atual: {movie['duration']}\33[m')
+                newDuration = input('\33[34mDigite a nova duração do filme: \33[m')
+                newHour = int(newDuration) // 60
+                newMinutes = int(newDuration) % 60
+                movie['duration'] = newDuration
+                movie['hours'] = newHour
+                movie['minutes'] = newMinutes
+                print('\033[32mAlteração feita com sucesso!\033[m')
+            elif update == 6:
+                print(f'\33[33mPreço do Ingresso Atual: {movie['price']}\33[m')
+                newPrice = input('\33[34mDigite o novo preço do ingresso: \33[m')
+                movie['price'] = newPrice
+                print('\033[32mAlteração feita com sucesso!\033[m')
+            elif update == 7:
+                break
+            else:
+                print('\33[31mDigite uma opção válida!\33[m')
+            input('Pressione qualquer tecla para continuar!')
+            
+def deleteMovie(movies=list):
+    searchMovie = valid.valStr('Qual filme deseja remover? \nFilme: ')
+    count = 0
+    for movie in movies:
+        if movie['title'] == searchMovie:
+            del movies[count]
+            print('\033[32mRemoção feita com sucesso!\033[m')
+            input('Pressione qualquer tecla para continuar!')
+        count += 1
+        
+def catalogue(movies=list):
+    print('\33[34mQual filme deseja visualizar?\033[m')
+    for movie in movies:
+        searchMovie = menu.menu(movie['title'])
+        if movie['title'] == searchMovie:
+            menu.line()
+            print(f'\033[36mTítulo do filme: \033[33m{movie['title']}\n\033[36mGênero do filme: \033[33m{movie['genre']}\n\033[36mSinopse do Filme: \033[33m{movie['sinopse']}\n\033[36mFaixa etária permitida: \033[33m{movie['ageRating']}\n\033[36mDuração: \033[33m{movie['hours']} Hora(s) e {movie['minutes']} Minuto(s)\n\033[36mPreço do ingresso: \033[33mR${movie['price']}\n\033[36mAprovação: \033[33m{movie['rating']}%\33[m')
+            menu.line()
+            input('Pressione qualquer tecla para continuar!')

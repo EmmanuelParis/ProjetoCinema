@@ -2,6 +2,9 @@ def valInt(txt):
     while True:
         try:
             n = int(input(txt))
+            if n < 0:
+                print('\033[31mErro: Por Favor, digite uma opção válida! \033[m')
+                continue
         except(ValueError, TypeError):
             print('\033[31mErro: Por Favor, digite uma opção válida! \033[m')
             continue
@@ -30,8 +33,8 @@ def valStr(txt):
 def valEmail(txt):
     while True:
         n = input(txt)
-        if n.count('@') != 0:
+        if n.count('@') != 0 and len(n) > 3:
             return True
         else:
-            print('\033[31mErro: Por Favor, digite um email válido! \033[m')
+            print('\033[31mErro: Por Favor, digite um e-mail válido! \033[m')
             continue
