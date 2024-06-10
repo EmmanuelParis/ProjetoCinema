@@ -38,6 +38,7 @@ def register(users=list):
     user['id'] = accessType
     user['bank'] = 0
     user['recognized'] = False
+    user['watched'] = list()
     return user
 
 def logIn(users=dict):

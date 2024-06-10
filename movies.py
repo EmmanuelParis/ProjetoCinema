@@ -3,9 +3,11 @@ import menus as menu
 import random
 
 genres = ('Ação', 'Aventura', 'Drama', 'Comédia', 'Ficção Científica', 'Terror')
+updateOptions = ('Título', 'Gênero', 'Sinopse', 'Faixa Etária', 'Duração', 'Preço do Ingresso', 'Sair')
 
 def createMovie():
     global genres
+    
     title = valid.valStr('Digite o título do filme: ')
     print('\033[33mEscolha o gênero do filme:')
     genre = menu.menu(genres)
@@ -15,6 +17,7 @@ def createMovie():
     hours = int(duration) // 60
     minutes = int(duration) % 60
     price = valid.valInt('Digite o valor do Ingresso: ')
+    capacity = valid.valInt('Digite a capacidade da sala: ')
     
     movie = dict()
     movie['title'] = title
@@ -26,6 +29,8 @@ def createMovie():
     movie['minutes'] = minutes
     movie['price'] = price
     movie['rating'] = random.randint(1,100)
+    movie['capacity'] = capacity
+    movie['chairs'] = capacity
     movie['comments'] = list()
     return movie
 
@@ -40,7 +45,8 @@ def readMovie(movies=list):
             
 def updateMovie(movies=list):
     global genres
-    updateOptions = ('Título', 'Gênero', 'Sinopse', 'Faixa Etária', 'Duração', 'Preço do Ingresso', 'Sair')
+    global updateOptions
+    
     searchMovie = valid.valStr('Qual filme deseja atualizar? \nFilme: ')
     for movie in movies:
         if movie['title'] == searchMovie:
@@ -98,11 +104,22 @@ def deleteMovie(movies=list):
         count += 1
         
 def catalogue(movies=list):
+    menu.title('FILMES')
+    
     print('\33[34mQual filme deseja visualizar?\033[m')
+    searchMovie = menu.showMovies(movies)
     for movie in movies:
-        searchMovie = menu.menu(movie['title'])
-        if movie['title'] == searchMovie:
+        if searchMovie == movie['title']:
             menu.line()
             print(f'\033[36mTítulo do filme: \033[33m{movie['title']}\n\033[36mGênero do filme: \033[33m{movie['genre']}\n\033[36mSinopse do Filme: \033[33m{movie['sinopse']}\n\033[36mFaixa etária permitida: \033[33m{movie['ageRating']}\n\033[36mDuração: \033[33m{movie['hours']} Hora(s) e {movie['minutes']} Minuto(s)\n\033[36mPreço do ingresso: \033[33mR${movie['price']}\n\033[36mAprovação: \033[33m{movie['rating']}%\33[m')
             menu.line()
             input('Pressione qualquer tecla para continuar!')
+            
+def buyTicket(movies=list):
+    menu.title('FILMES')
+    
+    print('\33[34mDe qual filme deseja comprar o ingresso?\033[m')
+    searchMovie = menu.showMovies(movies)
+    for movie in movies:
+        if (searchMovie == movie['title']):
+            print(f'Capacidade da sala: {movie['capacity']}\nCadeiras Livres: {movie['chairs']}')

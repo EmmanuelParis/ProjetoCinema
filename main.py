@@ -13,7 +13,8 @@ users = [{
     'email' : 'emmanuelparis2005@gmail.com',
     'id' : False,
     'bank' : 0,
-    'recognized' : False
+    'recognized' : False,
+    'watched' : list()
     }]
 
 movies = [{
@@ -24,8 +25,24 @@ movies = [{
     'duration' : '150',
     'hours' : '2',
     'minutes' : '30',
-    'price'  : '24.99',
+    'price'  : '25',
     'rating' : '99',
+    'capacity' : 50,
+    'chairs' : 50,
+    'comments' : list()
+},
+          {
+    'title' : 'filme2',
+    'genre' : 'Comédia',
+    'sinopse' :'RISOS',
+    'ageRating' : '10',
+    'duration' : '180',
+    'hours' : '3',
+    'minutes' : '0',
+    'price'  : '30',
+    'rating' : '88',
+    'capacity' : 50,
+    'chairs' : 50,
     'comments' : list()
 }]
 
@@ -58,12 +75,14 @@ while True:
                         sleep(3)
                     
                     elif action == 2:
-                        mov.catalogue()
+                        mov.catalogue(movies)
                         
                     elif action == 3:
+                        
                         pass
                     
                     elif action == 4:
+                        
                         pass
                     
                     elif action == 5:
@@ -95,7 +114,6 @@ while True:
             
     elif action == 2:
         users.append(auth.register(users))
-        print(users)
         
     elif action == 3:
         print('\033[31mFinalizando o programa...\033[m')
