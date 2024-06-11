@@ -115,11 +115,67 @@ def catalogue(movies=list):
             menu.line()
             input('Pressione qualquer tecla para continuar!')
             
-def buyTicket(movies=list):
+def buyTicket(movies=list, users=list):
     menu.title('FILMES')
     
     print('\33[34mDe qual filme deseja comprar o ingresso?\033[m')
     searchMovie = menu.showMovies(movies)
     for movie in movies:
-        if (searchMovie == movie['title']):
+        if searchMovie == movie['title']:
+            menu.title(movie['title'])
             print(f'Capacidade da sala: {movie['capacity']}\nCadeiras Livres: {movie['chairs']}')
+            buy = valid.valInt(f'Quantos ingressos deseja comprar? [R${movie['price']}]\nQuantidade: ')
+            if buy == 0:
+                break
+            for user in users:
+                if user['recognized'] and user['bank'] >= int(movie['price'])*buy and buy <= int(movie['chairs']):
+                    if buy <= int(movie['chairs']):
+                        user['watched'].append(movie['title'])
+                        user['bank'] -= buy*int(movie['price'])
+                        movie['chairs'] -= buy
+                        with open('boughtTickets.txt','a') as controlTickets:
+                            controlTickets.write(f'{movie['title']},{buy}\n')
+                        print('Compra realizada com sucesso!')
+                        input('Pressione qualquer tecla para continuar!')
+                        break
+                    else:
+                        print('Não é possível realizar a compra desta quantidade!')
+                        input('Pressione qualquer tecla para continuar!')
+                elif user['bank'] < int(movie['price'])*buy or buy > int(movie['chairs']):
+                    print('Saldo inválido!')
+                    input('Pressione qualquer tecla para continuar!')
+                    
+def rateMovie(movies=list, users=list):
+    menu.title('FILMES')
+    
+    print('\33[34mQual filme deseja avaliar?\033[m')
+    searchMovie = menu.showMovies(movies)
+    for movie in movies:
+        if searchMovie == movie['title']:
+            for user in users:
+                if user['recognized'] and movie['title'] in user['watched']:
+                    menu.title(movie['title'])
+                    comment = valid.valStr('Digite um comentário:\nComentário:  ')
+                    rate = valid.valInt('Digite sua nota para esse filme [0-100]:\nNota: ')
+                    ratingPerUser = dict()
+                    ratingPerUser['user'] = user['user']
+                    ratingPerUser['comment'] = comment
+                    ratingPerUser['rate'] = rate
+                    movie['comments'].append(ratingPerUser)
+                    print('Avaliação registrada!')
+                    input('Pressione qualquer tecla para continuar!')
+            if movie['title'] not in user['watched']:
+                print('Você não assistiu a este filme!')
+                input('Pressione qualquer tecla para continuar!')
+
+def showRating(movies=list):
+    searchMovie = menu.showMovies(movies)
+    for movie in movies:
+        if searchMovie == movie['title']:
+            menu.title(movie['title'])
+            for i in movie['comments']:
+                print(f'Usuário: {i['user']}')
+                print(f'Comentário: {i['comment']}')
+                print(f'Avaliação: {i['rate']}')
+                menu.line()
+    input('Pressione qualquer tecla para continuar!')
