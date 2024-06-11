@@ -30,7 +30,8 @@ movies = [{
     'rating' : '99',
     'capacity' : 50,
     'chairs' : 50,
-    'comments' : list()
+    'comments' : list(),
+    'bought' : 0
 },
           {
     'title' : 'Quebrando a Banca: O Tigrinho',
@@ -44,7 +45,8 @@ movies = [{
     'rating' : '88',
     'capacity' : 80,
     'chairs' : 80,
-    'comments' : list()
+    'comments' : list(),
+    'bought' : 0
 }]
 
 while True:
@@ -67,8 +69,8 @@ while True:
                     action = menu.menu(['Depositar Dinheiro', 'Catálogo', 'Comprar Ingresso', 'Avaliar Filmes', 'Ingressos Vendidos', 'LogOut'])
                     
                     if action == 1:
-                        deposit = valid.valInt('Quanto deseja depositar? \nR$')
-                        print('Gerando o QR Code para depósito...')
+                        deposit = valid.valInt('\033[34mQuanto deseja depositar? \nR$ \033[m')
+                        print('\033[33mGerando o QR Code para depósito...\033[m')
                         sleep(1)                
                         pix = Image.open("./pix.png")
                         pix.show()
@@ -95,7 +97,7 @@ while True:
                 
                     system('cls')
                     menu.title('MENU - ADMIN')
-                    action = menu.menu(['Criar Filme', 'Buscar Filme', 'Atualizar Filme', 'Apagar Filme', 'Ingressos Vendidos', 'Feedback', '','LogOut'])
+                    action = menu.menu(['Criar Filme', 'Buscar Filme', 'Atualizar Filme', 'Apagar Filme', 'Ingressos Vendidos', 'Feedback', 'Caixa','LogOut'])
                 
                     if action == 1:
                         movies.append(mov.createMovie())
@@ -116,6 +118,9 @@ while True:
                         mov.showRating(movies)
                     
                     elif action == 7:
+                        tck.showProfit(movies)
+                    
+                    elif action == 8:
                         auth.logOut(users)
                         loggedIn = False
                 

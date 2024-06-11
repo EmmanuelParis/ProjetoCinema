@@ -8,16 +8,16 @@ updateOptions = ('Título', 'Gênero', 'Sinopse', 'Faixa Etária', 'Duração', 
 def createMovie():
     global genres
     
-    title = valid.valStr('Digite o título do filme: ')
+    title = valid.valStr('\033[34mDigite o título do filme: \033[m')
     print('\033[33mEscolha o gênero do filme:')
     genre = menu.menu(genres)
-    sinopse = valid.valStr('Digite a sinopse do filme: ')
-    ageRating = valid.valInt('Digite a faixa etária do filme: ')
-    duration = valid.valInt('Digite a duração do filme (em minutos): ')
+    sinopse = valid.valStr('\033[34mDigite a sinopse do filme: \033[m')
+    ageRating = valid.valInt('\033[34mDigite a faixa etária do filme: \033[m')
+    duration = valid.valInt('\033[34mDigite a duração do filme (em minutos): \033[m')
     hours = int(duration) // 60
     minutes = int(duration) % 60
-    price = valid.valInt('Digite o valor do Ingresso: ')
-    capacity = valid.valInt('Digite a capacidade da sala: ')
+    price = valid.valInt('\033[34mDigite o valor do Ingresso: \033[m')
+    capacity = valid.valInt('\033[34mDigite a capacidade da sala: \033[m')
     
     movie = dict()
     movie['title'] = title
@@ -32,10 +32,11 @@ def createMovie():
     movie['capacity'] = capacity
     movie['chairs'] = capacity
     movie['comments'] = list()
+    movie['bought'] = 0
     return movie
 
 def readMovie(movies=list):
-    searchMovie = valid.valStr('Qual filme deseja buscar? \nFilme: ')
+    searchMovie = valid.valStr('\033[34mQual filme deseja buscar? \nFilme: \033[m')
     for movie in movies:
         if movie['title'] == searchMovie:
             menu.line()
@@ -47,7 +48,7 @@ def updateMovie(movies=list):
     global genres
     global updateOptions
     
-    searchMovie = valid.valStr('Qual filme deseja atualizar? \nFilme: ')
+    searchMovie = valid.valStr('\033[mQual filme deseja atualizar? \nFilme: \033[m')
     for movie in movies:
         if movie['title'] == searchMovie:
             print('\033[33mQual informação deseja atualizar?')
@@ -94,7 +95,7 @@ def updateMovie(movies=list):
             input('Pressione qualquer tecla para continuar!')
             
 def deleteMovie(movies=list):
-    searchMovie = valid.valStr('Qual filme deseja remover? \nFilme: ')
+    searchMovie = valid.valStr('\033[34mQual filme deseja remover? \nFilme: \033[m')
     count = 0
     for movie in movies:
         if movie['title'] == searchMovie:
@@ -123,8 +124,8 @@ def buyTicket(movies=list, users=list):
     for movie in movies:
         if searchMovie == movie['title']:
             menu.title(movie['title'])
-            print(f'Capacidade da sala: {movie['capacity']}\nCadeiras Livres: {movie['chairs']}')
-            buy = valid.valInt(f'Quantos ingressos deseja comprar? [R${movie['price']}]\nQuantidade: ')
+            print(f'\033[34mCapacidade da sala: \033[33m{movie['capacity']}\n\033[34mCadeiras Livres: \033[33m{movie['chairs']}\n')
+            buy = valid.valInt(f'\033[34mQuantos ingressos deseja comprar? \033[33m[R${movie['price']}]\n\033[34mQuantidade: \033[m')
             if buy == 0:
                 break
             for user in users:
@@ -133,16 +134,17 @@ def buyTicket(movies=list, users=list):
                         user['watched'].append(movie['title'])
                         user['bank'] -= buy*int(movie['price'])
                         movie['chairs'] -= buy
+                        movie['bought'] += buy*int(movie['price'])
                         with open('boughtTickets.txt','a') as controlTickets:
                             controlTickets.write(f'{movie['title']},{buy}\n')
-                        print('Compra realizada com sucesso!')
+                        print('\033[32mCompra realizada com sucesso!\033[m')
                         input('Pressione qualquer tecla para continuar!')
                         break
                     else:
-                        print('Não é possível realizar a compra desta quantidade!')
+                        print('\033[31mNão é possível realizar a compra desta quantidade!\033[m')
                         input('Pressione qualquer tecla para continuar!')
                 elif user['bank'] < int(movie['price'])*buy or buy > int(movie['chairs']):
-                    print('Saldo inválido!')
+                    print('\033[31mSaldo insuficiente!\033[m')
                     input('Pressione qualquer tecla para continuar!')
                     
 def rateMovie(movies=list, users=list):
@@ -155,17 +157,17 @@ def rateMovie(movies=list, users=list):
             for user in users:
                 if user['recognized'] and movie['title'] in user['watched']:
                     menu.title(movie['title'])
-                    comment = valid.valStr('Digite um comentário:\nComentário:  ')
-                    rate = valid.valInt('Digite sua nota para esse filme [0-100]:\nNota: ')
+                    comment = valid.valStr('\033[34mDigite um comentário:\nComentário:  \033[m')
+                    rate = valid.valInt('\033[34mDigite sua nota para esse filme [0-100]:\nNota: \033[m')
                     ratingPerUser = dict()
                     ratingPerUser['user'] = user['user']
                     ratingPerUser['comment'] = comment
                     ratingPerUser['rate'] = rate
                     movie['comments'].append(ratingPerUser)
-                    print('Avaliação registrada!')
+                    print('\033[32mAvaliação registrada!\033[m')
                     input('Pressione qualquer tecla para continuar!')
             if movie['title'] not in user['watched']:
-                print('Você não assistiu a este filme!')
+                print('\033[31mVocê não assistiu a este filme!\033[m')
                 input('Pressione qualquer tecla para continuar!')
 
 def showRating(movies=list):
@@ -174,8 +176,8 @@ def showRating(movies=list):
         if searchMovie == movie['title']:
             menu.title(movie['title'])
             for i in movie['comments']:
-                print(f'Usuário: {i['user']}')
-                print(f'Comentário: {i['comment']}')
-                print(f'Avaliação: {i['rate']}')
+                print(f'\033[34mUsuário: \033[33m{i['user']}\033[m')
+                print(f'\033[34mComentário: \033[33m{i['comment']}\033[m')
+                print(f'\033[34mAvaliação: \033[33m{i['rate']}\033[m')
                 menu.line()
     input('Pressione qualquer tecla para continuar!')

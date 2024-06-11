@@ -4,7 +4,7 @@ def register(users=list):
     validado = True
     
     while validado:
-        username = valid.valStr('Digite seu user: ')
+        username = valid.valStr('\033[34mDigite seu user: \033[m')
         for user in users:
             if username == user['user']:
                 print('\033[31mEste user já está sendo utilizado!\033[m') 
@@ -14,18 +14,18 @@ def register(users=list):
             break
     
     
-    password = valid.valStr('Digite sua senha: ')
-    email = valid.valEmail('Digite seu email: ')
+    password = valid.valStr('\033[34mDigite sua senha: \033[m')
+    email = valid.valEmail('\033[34mDigite seu email: \033[m')
     
     while validado:
-        age = valid.valInt('Digite sua idade: ')
+        age = valid.valInt('\033[34mDigite sua idade: \033[m')
         if age < 6 or age > 90:
             print('\033[31mIdade Inválida!\033[m')
             validado = True
         else:
             break
     
-    accessType = valid.valInt('Qual o tipo de cadastro? \n[1] - Cliente \n[2] - Admin \nOpção: ')
+    accessType = valid.valInt('\033[34mQual o tipo de cadastro? \033[33m\n[1] - Cliente \n[2] - Admin \033[34m\nOpção: \033[m')
     if accessType == 1:
         accessType = False
     elif accessType == 2:

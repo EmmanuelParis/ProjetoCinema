@@ -5,16 +5,11 @@ def showBoughtTickets():
     amount = list()
     
     with open('boughtTickets.txt','r') as controlTickets:
-        c = 0
         for ticket in controlTickets:
             index = ticket.find(',')
-            if ticket[:index] in movies:
-                
-                pass
-            else:
-                movies.append(ticket[:index])
-                amount.append(ticket[index+1:-2])
-            c += 1
+            movies.append(ticket[:index])
+            amount.append(ticket[index+1:])
+            
     if len(movies) == 0 or len(amount) == 0:
         print('Nenhum ingresso foi comprado!')
     else: 
@@ -28,3 +23,13 @@ def showBoughtTickets():
         plt.ylabel('Quantidade de Ingressos')
         
         plt.show()
+        
+def showProfit(movies=list):
+    profit = 0
+    for movie in movies:
+        print(f'\033[34mFilme: {movie['title']}\n\033[33mLucro: R${movie['bought']}\033[m')
+        profit += int(movie['bought'])
+        
+    print(f'\n\033[34mO cinema lucrou no total: \033[33mR${profit}\033[m')
+    input('Pressione qualquer tecla para continuar!')
+    
